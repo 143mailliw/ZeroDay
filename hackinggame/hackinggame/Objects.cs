@@ -35,8 +35,15 @@ using Microsoft.Xna.Framework.Input;
 
 namespace hackinggame
 {
-    static class RenderFunc
+    public interface Widget
     {
-        
+        void Init(GraphicsDeviceManager GD, SpriteBatch SB, Game GameContext);
+        void Draw(GameTime GameTick);
+        void Update(GameTime GameTick);
+    }
+    public interface Shell
+    {
+        void ParseIn(string Command, Terminal Context);
+        string GetPrompt();
     }
 }

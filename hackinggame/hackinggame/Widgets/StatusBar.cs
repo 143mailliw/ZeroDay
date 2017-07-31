@@ -35,7 +35,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace hackinggame
 {
-    class StatusBar
+    class StatusBar : Widget
     {
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;

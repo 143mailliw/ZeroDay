@@ -39,10 +39,9 @@ namespace hackinggame
     {
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
-        SpriteFont Font;
         StatusBar Bar;
         Terminal TerminalMain;
-
+        List<Widget> Widgets = new List<Widget>();
         public Game()
         {
             Graphics = new GraphicsDeviceManager(this);
@@ -51,17 +50,16 @@ namespace hackinggame
 
         protected override void Initialize()
         {
-            TerminalMain = new Terminal();
-            Bar = new StatusBar();
+            Widgets.Add(new Terminal());
+            Widgets.Add(new StatusBar());
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-
-            TerminalMain.Init(Graphics, SpriteBatch, this);
-            Bar.Init(Graphics, SpriteBatch, this);
+            foreach (Widget WidgetToInit in Widgets)
+                WidgetToInit.Init(Graphics, SpriteBatch, this);
         }
 
         protected override void UnloadContent()
@@ -75,8 +73,9 @@ namespace hackinggame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-			// TODO: Add your update logic here
-			TerminalMain.Update(gameTime);
+            // TODO: Add your update logic here
+            foreach (Widget WidgetToUpdate in Widgets)
+                WidgetToUpdate.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -84,8 +83,8 @@ namespace hackinggame
         {
             GraphicsDevice.Clear(Color.Black);
             SpriteBatch.Begin();
-            TerminalMain.Draw(gameTime);
-            Bar.Draw(gameTime);
+            foreach (Widget WidgetToDraw in Widgets)
+                WidgetToDraw.Draw(gameTime);
             base.Draw(gameTime);
             SpriteBatch.End();
         }
