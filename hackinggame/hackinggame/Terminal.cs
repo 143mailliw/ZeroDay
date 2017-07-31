@@ -50,6 +50,7 @@ namespace hackinggame
         int ValuesChecked = 0;
         string Prefix = "Memes~$ ";
         List<string> Strings = new List<string>();
+        int MaxLineWidth = 0;
         public void Init(GraphicsDeviceManager GD, SpriteBatch SB, Game GameContext)
         {
             Context = GameContext;
@@ -78,18 +79,45 @@ namespace hackinggame
 
         public void Update(GameTime GameTick)
         {
+            MaxLineWidth = Context.Window.ClientBounds.Width - 20;
+        }
 
+        private string WrapText(string Text) //Credit to Sankra
+        {
+            if (Font.MeasureString(Text).X < MaxLineWidth)
+                return Text;
+
+            string[] Words = Text.Split(' ');
+            StringBuilder WrappedText = new StringBuilder();
+            float LineWidth = 0f;
+            float SpaceWidth = Font.MeasureString(" ").X;
+            for (int i = 0; i < Words.Length; ++i)
+            {
+                Vector2 Size = Font.MeasureString(Words[i]);
+                if (LineWidth + Size.X < MaxLineWidth)
+                {
+                    LineWidth += Size.X + SpaceWidth;
+                }
+                else
+                {
+                    WrappedText.Append("\n");
+                    LineWidth = Size.X + SpaceWidth;
+                }
+                WrappedText.Append(Words[i]);
+                WrappedText.Append(" ");
+            }
+
+            return WrappedText.ToString();
         }
 
         public void Draw(GameTime GameTick)
         {
-            // Finds the center of the string in coordinates inside the text rectangle
             try
             {
                 CurrentIn = "";
                 foreach (string ToAdd in Strings)
-                    CurrentIn += ToAdd + Environment.NewLine;
-                Vector2 Measure = Font.MeasureString(Prefix + CurrentIn);
+                    CurrentIn += WrapText(ToAdd) + Environment.NewLine;
+                Vector2 Measure = Font.MeasureString(CurrentIn);
                 if (Measure.Y > Context.Window.ClientBounds.Height - 32 && ValuesChecked != Strings.Count)
                 {
                     float FCA = Context.Window.ClientBounds.Height - Measure.Y;
@@ -97,7 +125,6 @@ namespace hackinggame
                     CurrentY = CheckAgainst;
                     ValuesChecked = Strings.Count;
                 }
-                // Places text in center of the screen
                 Vector2 Position = new Vector2(CurrentX, CurrentY);
                 SpriteBatch.DrawString(Font, CurrentIn, Position, Color.White, 0, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0.5f);
             }
