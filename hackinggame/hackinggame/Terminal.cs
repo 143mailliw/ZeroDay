@@ -71,18 +71,17 @@ namespace hackinggame
                 {
                     CurrentIn += args.Character?.ToString() ?? "";
                 }
-                if ( CurrentIn.Length < 0 )
-                {
-                    CurrentIn = "";
-                }
             };
 
         }
 
         public void Update(GameTime GameTick)
 		{
-
-		}
+            if (CurrentIn.Length < 0)
+            {
+                CurrentIn = "";
+            }
+        }
 
 		private void KD(object sender, MonoGame.Extended.Input.InputListeners.KeyboardEventArgs EventArgs)
 		{
@@ -105,7 +104,7 @@ namespace hackinggame
             }
             catch
             {
-
+                CurrentIn = "";
             }
 			SpriteBatch.End();
 		}
