@@ -41,7 +41,7 @@ namespace hackinggame
         SpriteBatch SpriteBatch;
         SpriteFont Font;
         Game Context;
-        String CurrentIn = "";
+        string CurrentIn = "";
         MonoGame.Extended.Input.InputListeners.KeyboardListenerSettings KeySettings = new MonoGame.Extended.Input.InputListeners.KeyboardListenerSettings();
         MonoGame.Extended.Input.InputListeners.KeyboardListener KeyListen;
         MonoGame.Extended.Input.InputListeners.MouseListener MouseListen;
@@ -49,7 +49,7 @@ namespace hackinggame
         int CurrentX = 10;
         int ValuesChecked = 0;
         string Prefix = "Memes~$ ";
-        List<String> Strings = new List<string>();
+        List<string> Strings = new List<string>();
         public void Init(GraphicsDeviceManager GD, SpriteBatch SB, Game GameContext)
 		{
             Context = GameContext;
