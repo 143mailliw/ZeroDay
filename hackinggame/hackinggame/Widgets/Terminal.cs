@@ -42,16 +42,18 @@ namespace hackinggame
         SpriteFont Font;
         public Game Context;
         string CurrentIn = "";
-        MonoGame.Extended.Input.InputListeners.KeyboardListenerSettings KeySettings = new MonoGame.Extended.Input.InputListeners.KeyboardListenerSettings();
-        MonoGame.Extended.Input.InputListeners.MouseListenerSettings MouseSettings = new MonoGame.Extended.Input.InputListeners.MouseListenerSettings();
-        MonoGame.Extended.Input.InputListeners.KeyboardListener KeyListen;
-        MonoGame.Extended.Input.InputListeners.MouseListener MouseListen;
+        KeyboardListenerSettings KeySettings = new KeyboardListenerSettings();
+        MouseListenerSettings MouseSettings = new MouseListenerSettings();
+        KeyboardListener KeyListen;
+        MouseListener MouseListen;
         int CurrentY = 32;
         int CurrentX = 10;
         int ValuesChecked = 0;
         public List<string> Strings = new List<string>();
         Shell ShellToUse = new DefaultShell();
         int MaxLineWidth = 0;
+        int ScrollUp = 0;
+        int LastScrollValue = 0;
         public void Init(GraphicsDeviceManager GD, SpriteBatch SB, Game GameContext)
         {
             Context = GameContext;
@@ -59,12 +61,19 @@ namespace hackinggame
             Graphics = GD;
             KeySettings.RepeatDelayMilliseconds = 15;
             Context.IsMouseVisible = true;
-            KeyListen = new MonoGame.Extended.Input.InputListeners.KeyboardListener(KeySettings);
-            MouseListen = new MonoGame.Extended.Input.InputListeners.MouseListener(MouseSettings);
+            KeyListen = new KeyboardListener(KeySettings);
+            MouseListen = new MouseListener(MouseSettings);
             Context.Components.Add(new InputListenerComponent(Context, MouseListen, KeyListen));
             Font = Context.Content.Load<SpriteFont>("font2");
             Context.Window.AllowUserResizing = true;
             Strings.Add(ShellToUse.GetPrompt());
+            MouseListen.MouseDown += (sender, args) =>
+            {
+                if(args.Button == MouseButton.Right)
+                {
+                    Strings[Strings.Count - 1] += System.Windows.Forms.Clipboard.GetText();
+                }
+            };
             KeyListen.KeyPressed += (sender, args) =>
             {
                 if (args.Key == Keys.Up)
@@ -87,13 +96,14 @@ namespace hackinggame
                 }
                 else if (args.Key == Keys.Enter)
                 {
-                    string ToSend = Strings[Strings.Count - 1].Substring(ShellToUse.GetPrompt().Length, Strings[Strings.Count -1].Length - ShellToUse.GetPrompt().Length);
+                    string ToSend = Strings[Strings.Count - 1].Substring(ShellToUse.GetPrompt().Length, Strings[Strings.Count - 1].Length - ShellToUse.GetPrompt().Length);
                     ShellToUse.ParseIn(ToSend, this);
                 }
                 else
                 {
                     Strings[Strings.Count - 1] += args.Character?.ToString() ?? "";
                     ShellToUse.Index = 0;
+                    ScrollUp = 0;
                 }
             };
 
@@ -102,11 +112,21 @@ namespace hackinggame
         public void SendOut(string ToAdd)
         {
             Strings.Add(ToAdd);
+            ScrollUp = 0;
         }
 
         public void Update(GameTime GameTick)
         {
             MaxLineWidth = Context.Window.ClientBounds.Width - 20;
+            if (Mouse.GetState().ScrollWheelValue > LastScrollValue)
+            {
+                ScrollUp += 10;
+            }
+            if (Mouse.GetState().ScrollWheelValue < LastScrollValue)
+            {
+                ScrollUp -= 10;
+            }
+            LastScrollValue = Mouse.GetState().ScrollWheelValue;
         }
 
         private string WrapText(string Text) //Credit to Sankra
@@ -141,15 +161,21 @@ namespace hackinggame
         {
             try
             {
+
                 CurrentIn = "";
                 foreach (string ToAdd in Strings)
                     CurrentIn += WrapText(ToAdd) + Environment.NewLine;
                 Vector2 Measure = Font.MeasureString(CurrentIn);
-                if (Measure.Y > Context.Window.ClientBounds.Height - 32 && ValuesChecked != Strings.Count)
+                if (ScrollUp > (int)(Measure.Y - (Context.Window.ClientBounds.Height - 32)))
+                    ScrollUp = (int)(Measure.Y - (Context.Window.ClientBounds.Height - 32));
+                if (0 > ScrollUp)
+                    ScrollUp = 0;
+                float FCA = Context.Window.ClientBounds.Height - Measure.Y;
+                if (Measure.Y > Context.Window.ClientBounds.Height - 32)
                 {
-                    float FCA = Context.Window.ClientBounds.Height - Measure.Y;
+                    FCA = Context.Window.ClientBounds.Height - Measure.Y;
                     int CheckAgainst = (int)FCA + 10;
-                    CurrentY = CheckAgainst;
+                    CurrentY = CheckAgainst + ScrollUp;
                     ValuesChecked = Strings.Count;
                 }
                 Vector2 Position = new Vector2(CurrentX, CurrentY);
