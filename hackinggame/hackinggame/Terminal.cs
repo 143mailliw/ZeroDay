@@ -45,8 +45,11 @@ namespace hackinggame
         MonoGame.Extended.Input.InputListeners.KeyboardListenerSettings KeySettings = new MonoGame.Extended.Input.InputListeners.KeyboardListenerSettings();
         MonoGame.Extended.Input.InputListeners.KeyboardListener KeyListen;
         MonoGame.Extended.Input.InputListeners.MouseListener MouseListen;
-        int CurrentX;
-        int CurrentY;
+        int CurrentY = 40;
+        int CurrentX = 10;
+        int ValuesChecked = 0;
+        string Prefix = "Memes~$ ";
+        List<String> Strings = new List<string>();
         public void Init(GraphicsDeviceManager GD, SpriteBatch SB, Game GameContext)
 		{
             Context = GameContext;
@@ -57,53 +60,48 @@ namespace hackinggame
             Context.Components.Add(new InputListenerComponent(Context, MouseListen, KeyListen));
             Font = Context.Content.Load<SpriteFont>("font2");
             Context.Window.AllowUserResizing = true;
+            Strings.Add(Prefix);
             KeyListen.KeyTyped += (sender, args) =>
             {
                 if (args.Key == Keys.Back && CurrentIn.Length > 0)
                 {
-                    CurrentIn = CurrentIn.Substring(0, CurrentIn.Length - 1);
+                    if (Strings[Strings.Count - 1] != Prefix)
+                        Strings[Strings.Count - 1] = Strings[Strings.Count - 1].Substring(0, Strings[Strings.Count - 1].Length - 1);
                 }
                 else if (args.Key == Keys.Enter)
-                {
-                    CurrentIn += Environment.NewLine;
-                }
+                    Strings.Add("Memes~$ ");
                 else
-                {
-                    CurrentIn += args.Character?.ToString() ?? "";
-                }
+                    Strings[Strings.Count - 1] += args.Character?.ToString() ?? "";
             };
 
         }
 
         public void Update(GameTime GameTick)
 		{
-            if (CurrentIn.Length < 0)
-            {
-                CurrentIn = "";
-            }
-        }
 
-		private void KD(object sender, MonoGame.Extended.Input.InputListeners.KeyboardEventArgs EventArgs)
-		{
-            Console.Beep();
-            Console.WriteLine(EventArgs.Character);
-            CurrentIn = CurrentIn + EventArgs.Character.Value;
-		}
+        }
 
 		public void Draw(GameTime GameTick)
 		{
 			// Finds the center of the string in coordinates inside the text rectangle
             try
             {
-                Vector2 TextMiddlePoint = Font.MeasureString("Memes~$ " + CurrentIn) / 2;
+                CurrentIn = " ";
+                foreach(string ToAdd in Strings)
+                    CurrentIn += ToAdd + Environment.NewLine;
+                Vector2 Measure = Font.MeasureString("Memes~$ " + CurrentIn);
+                if(Measure.Y > Context.Window.ClientBounds.Height - 40 && ValuesChecked != Strings.Count)
+                {
+                    float FCA = Context.Window.ClientBounds.Height - Measure.Y;
+                    int CheckAgainst = (int)FCA + 10;
+                    CurrentY = CheckAgainst;
+                    ValuesChecked = Strings.Count;
+                }
                 // Places text in center of the screen
-                Vector2 Position = new Vector2(Context.Window.ClientBounds.Width / 2, Context.Window.ClientBounds.Height / 2);
-                SpriteBatch.DrawString(Font, "Memes~$ " + CurrentIn, Position, Color.White, 0, TextMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
+                Vector2 Position = new Vector2(CurrentX, CurrentY);
+                SpriteBatch.DrawString(Font, CurrentIn, Position, Color.White, 0, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0.5f);
             }
-            catch
-            {
-                CurrentIn = "";
-            }
+            catch { CurrentIn = ""; }
 		}
 	}
 }
