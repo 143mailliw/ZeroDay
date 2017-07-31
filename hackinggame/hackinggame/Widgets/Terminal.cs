@@ -40,7 +40,7 @@ namespace hackinggame
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
         SpriteFont Font;
-        Game Context;
+        public Game Context;
         string CurrentIn = "";
         MonoGame.Extended.Input.InputListeners.KeyboardListenerSettings KeySettings = new MonoGame.Extended.Input.InputListeners.KeyboardListenerSettings();
         MonoGame.Extended.Input.InputListeners.MouseListenerSettings MouseSettings = new MonoGame.Extended.Input.InputListeners.MouseListenerSettings();
@@ -49,8 +49,7 @@ namespace hackinggame
         int CurrentY = 32;
         int CurrentX = 10;
         int ValuesChecked = 0;
-        string Prefix = "Memes~$ ";
-        List<string> Strings = new List<string>();
+        public List<string> Strings = new List<string>();
         Shell ShellToUse = new DefaultShell();
         int MaxLineWidth = 0;
         public void Init(GraphicsDeviceManager GD, SpriteBatch SB, Game GameContext)
@@ -65,7 +64,20 @@ namespace hackinggame
             Context.Components.Add(new InputListenerComponent(Context, MouseListen, KeyListen));
             Font = Context.Content.Load<SpriteFont>("font2");
             Context.Window.AllowUserResizing = true;
-            Strings.Add(Prefix);
+            Strings.Add(ShellToUse.GetPrompt());
+            KeyListen.KeyPressed += (sender, args) =>
+            {
+                if (args.Key == Keys.Up)
+                {
+                    ShellToUse.UpIndex(1);
+                    Strings[Strings.Count - 1] = ShellToUse.GetFromIndex(this);
+                }
+                else if (args.Key == Keys.Down)
+                {
+                    ShellToUse.DownIndex(1);
+                    Strings[Strings.Count - 1] = ShellToUse.GetFromIndex(this);
+                }
+            };
             KeyListen.KeyTyped += (sender, args) =>
             {
                 if (args.Key == Keys.Back && CurrentIn.Length > 0)
@@ -75,11 +87,14 @@ namespace hackinggame
                 }
                 else if (args.Key == Keys.Enter)
                 {
-                    string ToSend = Strings[Strings.Count - 1].Substring(ShellToUse.GetPrompt().Length + 1, Strings[Strings.Count -1].Length - ShellToUse.GetPrompt().Length - 1);
+                    string ToSend = Strings[Strings.Count - 1].Substring(ShellToUse.GetPrompt().Length, Strings[Strings.Count -1].Length - ShellToUse.GetPrompt().Length);
                     ShellToUse.ParseIn(ToSend, this);
                 }
                 else
+                {
                     Strings[Strings.Count - 1] += args.Character?.ToString() ?? "";
+                    ShellToUse.SetIndex(0);
+                }
             };
 
         }

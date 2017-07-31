@@ -39,8 +39,6 @@ namespace hackinggame
     {
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
-        StatusBar Bar;
-        Terminal TerminalMain;
         List<Widget> Widgets = new List<Widget>();
         public Game()
         {
@@ -70,9 +68,6 @@ namespace hackinggame
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
             // TODO: Add your update logic here
             foreach (Widget WidgetToUpdate in Widgets)
                 WidgetToUpdate.Update(gameTime);

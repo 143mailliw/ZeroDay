@@ -43,7 +43,21 @@ namespace hackinggame
     }
     public interface Shell
     {
+        void UpIndex(int Modifyer);
+        void DownIndex(int Modifyer);
+        void SetIndex(int Modifyer);
+        string GetFromIndex(Terminal Context);
         void ParseIn(string Command, Terminal Context);
         string GetPrompt();
+    }
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    public class DefaultCommand : Attribute
+    {
+        public string name;
+
+        public DefaultCommand(string name)
+        {
+            this.name = name;
+        }
     }
 }

@@ -3,19 +3,79 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace hackinggame
 {
     class DefaultShell : Shell
     {
+        List<string> History = new List<string>();
+        int BodgeTheHellOutaIt;
         public void ParseIn(string Command, Terminal Context)
         {
-            Context.SendOut(Command);
+            History.Add(Command);
+            string[] Strings = Command.Split(char.Parse(" "));
+            string Args = "";
+            bool IsNF = true;
+            try
+            {
+                Args = Command.Substring(Strings[0].Length + 1);
+            }
+            catch { }
+            var Type = typeof(DefaultCommands);
+            MethodInfo[] Methods = Type.GetMethods(BindingFlags.Public | BindingFlags.Static);
+            foreach (MethodInfo Method in Methods)
+            {
+                try
+                {
+                    var SomeAttrib = Method.GetCustomAttributes(false).FirstOrDefault(x => x is DefaultCommand) as DefaultCommand;
+                    if (SomeAttrib != null)
+                    {
+                        if (SomeAttrib.name == Strings[0])
+                        {
+                            Method.Invoke(this, new object[] { Args, Context });
+                            IsNF = false;
+                        }
+                    }
+                }
+                catch (Exception ex) { Console.WriteLine(ex.ToString()); Context.SendOut("Command not found"); }
+            }
+            if (IsNF)
+                Context.SendOut("Command not found");
             Context.SendOut(GetPrompt());
         }
+        //The bodgestest bodge for the Up/Down arrows
+        public void UpIndex(int Modifyer)
+        {
+            BodgeTheHellOutaIt += Modifyer;
+        }
+
+        public void DownIndex(int Modifyer)
+        {
+            BodgeTheHellOutaIt -= Modifyer;
+        }
+
+        public void SetIndex(int Modifyer)
+        {
+            BodgeTheHellOutaIt = Modifyer;
+        }
+
+        public string GetFromIndex(Terminal Context)
+        {
+            if (BodgeTheHellOutaIt < 0)
+                BodgeTheHellOutaIt = 0;
+            if (BodgeTheHellOutaIt > History.Count - 1)
+                BodgeTheHellOutaIt = History.Count - 1;
+            if (BodgeTheHellOutaIt == 0)
+                return GetPrompt() + "";
+            if (History.Count != 0)
+                return GetPrompt() + History[History.Count - BodgeTheHellOutaIt];
+            return GetPrompt() + "";
+        }
+
         public string GetPrompt()
         {
-            return "Memes~$";
+            return "Memes~$ ";
         }
     }
 }
