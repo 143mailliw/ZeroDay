@@ -46,9 +46,9 @@ namespace hackinggame
         MouseListenerSettings MouseSettings = new MouseListenerSettings();
         KeyboardListener KeyListen;
         MouseListener MouseListen;
-        int CurrentY = 32;
+        public int CurrentY = 32;
         int CurrentX = 10;
-        int ValuesChecked = 0;
+        public int ValuesChecked = 0;
         public List<string> Strings = new List<string>();
         Shell ShellToUse = new DefaultShell();
         int MaxLineWidth = 0;

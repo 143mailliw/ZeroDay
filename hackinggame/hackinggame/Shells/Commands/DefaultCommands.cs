@@ -17,6 +17,8 @@ namespace hackinggame
         [DefaultCommand("clear", "Clears the console")]
         public static void Clear(string args, Terminal Context)
         {
+            Context.CurrentY = 32;
+            Context.ValuesChecked = 0;
             Context.Strings.Clear();
         }
 
