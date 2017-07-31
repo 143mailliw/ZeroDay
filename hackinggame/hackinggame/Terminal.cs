@@ -45,7 +45,7 @@ namespace hackinggame
         MonoGame.Extended.Input.InputListeners.KeyboardListenerSettings KeySettings = new MonoGame.Extended.Input.InputListeners.KeyboardListenerSettings();
         MonoGame.Extended.Input.InputListeners.KeyboardListener KeyListen;
         MonoGame.Extended.Input.InputListeners.MouseListener MouseListen;
-        int CurrentY = 40;
+        int CurrentY = 32;
         int CurrentX = 10;
         int ValuesChecked = 0;
         string Prefix = "Memes~$ ";
@@ -69,7 +69,7 @@ namespace hackinggame
                         Strings[Strings.Count - 1] = Strings[Strings.Count - 1].Substring(0, Strings[Strings.Count - 1].Length - 1);
                 }
                 else if (args.Key == Keys.Enter)
-                    Strings.Add("Memes~$ ");
+                    Strings.Add(Prefix);
                 else
                     Strings[Strings.Count - 1] += args.Character?.ToString() ?? "";
             };
@@ -89,8 +89,8 @@ namespace hackinggame
                 CurrentIn = "";
                 foreach(string ToAdd in Strings)
                     CurrentIn += ToAdd + Environment.NewLine;
-                Vector2 Measure = Font.MeasureString("Memes~$ " + CurrentIn);
-                if(Measure.Y > Context.Window.ClientBounds.Height - 40 && ValuesChecked != Strings.Count)
+                Vector2 Measure = Font.MeasureString(Prefix + CurrentIn);
+                if(Measure.Y > Context.Window.ClientBounds.Height - 32 && ValuesChecked != Strings.Count)
                 {
                     float FCA = Context.Window.ClientBounds.Height - Measure.Y;
                     int CheckAgainst = (int)FCA + 10;
