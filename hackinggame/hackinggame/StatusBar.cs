@@ -1,4 +1,4 @@
-/*
+﻿/*
  * MIT License
  * 
  * Copyright (c) 2017 william341
@@ -35,59 +35,34 @@ using Microsoft.Xna.Framework.Input;
 
 namespace hackinggame
 {
-    public class Game : Microsoft.Xna.Framework.Game
+    class StatusBar
     {
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
         SpriteFont Font;
-        StatusBar Bar;
-        Terminal TerminalMain;
+        Game Context;
+        Texture2D Texture;
+        Vector2 Position;
 
-        public Game()
+        public void Init(GraphicsDeviceManager GD, SpriteBatch SB, Game GameContext)
         {
-            Graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
+            Context = GameContext;
+            SpriteBatch = SB;
+            Graphics = GD;
+            Position = new Vector2(0, 0);
+            Font = Context.Content.Load<SpriteFont>("font");
+            Texture = Context.Content.Load<Texture2D>("findthepixel");
+            Context.Window.AllowUserResizing = true;
         }
 
-        protected override void Initialize()
+        public void Update(GameTime GameTick)
         {
-            TerminalMain = new Terminal();
-            Bar = new StatusBar();
-            base.Initialize();
+
         }
 
-        protected override void LoadContent()
+        public void Draw(GameTime GameTick)
         {
-            SpriteBatch = new SpriteBatch(GraphicsDevice);
-
-            TerminalMain.Init(Graphics, SpriteBatch, this);
-            Bar.Init(Graphics, SpriteBatch, this);
-        }
-
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
-        }
-
-
-        protected override void Update(GameTime gameTime)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-			// TODO: Add your update logic here
-			TerminalMain.Update(gameTime);
-            base.Update(gameTime);
-        }
-
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.Black);
-            SpriteBatch.Begin();
-            TerminalMain.Draw(gameTime);
-            Bar.Draw(gameTime);
-            base.Draw(gameTime);
-            SpriteBatch.End();
+            SpriteBatch.Draw(Texture, new Rectangle(0, 0, Context.Window.ClientBounds.Width, 28), new Color (0,0,50));
         }
     }
 }

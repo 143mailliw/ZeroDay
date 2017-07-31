@@ -92,8 +92,6 @@ namespace hackinggame
 
 		public void Draw(GameTime GameTick)
 		{
-			// TODO: Add your drawing code here
-			SpriteBatch.Begin();
 			// Finds the center of the string in coordinates inside the text rectangle
             try
             {
@@ -106,7 +104,6 @@ namespace hackinggame
             {
                 CurrentIn = "";
             }
-			SpriteBatch.End();
 		}
 	}
 }
