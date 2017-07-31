@@ -52,10 +52,12 @@ namespace hackinggame
     public class DefaultCommand : Attribute
     {
         public string name;
+        public string description;
 
-        public DefaultCommand(string name)
+        public DefaultCommand(string name, string description)
         {
             this.name = name;
+            this.description = description;
         }
     }
 }

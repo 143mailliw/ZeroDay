@@ -70,9 +70,7 @@ namespace hackinggame
             MouseListen.MouseDown += (sender, args) =>
             {
                 if(args.Button == MouseButton.Right)
-                {
                     Strings[Strings.Count - 1] += System.Windows.Forms.Clipboard.GetText();
-                }
             };
             KeyListen.KeyPressed += (sender, args) =>
             {
@@ -119,13 +117,9 @@ namespace hackinggame
         {
             MaxLineWidth = Context.Window.ClientBounds.Width - 20;
             if (Mouse.GetState().ScrollWheelValue > LastScrollValue)
-            {
                 ScrollUp += 10;
-            }
             if (Mouse.GetState().ScrollWheelValue < LastScrollValue)
-            {
                 ScrollUp -= 10;
-            }
             LastScrollValue = Mouse.GetState().ScrollWheelValue;
         }
 
@@ -142,9 +136,7 @@ namespace hackinggame
             {
                 Vector2 Size = Font.MeasureString(Words[i]);
                 if (LineWidth + Size.X < MaxLineWidth)
-                {
                     LineWidth += Size.X + SpaceWidth;
-                }
                 else
                 {
                     WrappedText.Append("\n");

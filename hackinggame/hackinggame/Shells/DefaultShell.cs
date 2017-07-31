@@ -14,7 +14,7 @@ namespace hackinggame
         public void ParseIn(string Command, Terminal Context)
         {
             History.Add(Command);
-            string[] Strings = Command.Split(char.Parse(" "));
+            string[] Strings = Command.Split(' ');
             string Args = "";
             bool IsNF = true;
             try
