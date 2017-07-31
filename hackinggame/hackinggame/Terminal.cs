@@ -35,8 +35,8 @@ using Microsoft.Xna.Framework.Input;
 
 namespace hackinggame
 {
-	class Terminal
-	{
+    class Terminal
+    {
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
         SpriteFont Font;
@@ -51,7 +51,7 @@ namespace hackinggame
         string Prefix = "Memes~$ ";
         List<string> Strings = new List<string>();
         public void Init(GraphicsDeviceManager GD, SpriteBatch SB, Game GameContext)
-		{
+        {
             Context = GameContext;
             SpriteBatch = SB;
             Graphics = GD;
@@ -77,20 +77,20 @@ namespace hackinggame
         }
 
         public void Update(GameTime GameTick)
-		{
+        {
 
         }
 
-		public void Draw(GameTime GameTick)
-		{
-			// Finds the center of the string in coordinates inside the text rectangle
+        public void Draw(GameTime GameTick)
+        {
+            // Finds the center of the string in coordinates inside the text rectangle
             try
             {
                 CurrentIn = "";
-                foreach(string ToAdd in Strings)
+                foreach (string ToAdd in Strings)
                     CurrentIn += ToAdd + Environment.NewLine;
                 Vector2 Measure = Font.MeasureString(Prefix + CurrentIn);
-                if(Measure.Y > Context.Window.ClientBounds.Height - 32 && ValuesChecked != Strings.Count)
+                if (Measure.Y > Context.Window.ClientBounds.Height - 32 && ValuesChecked != Strings.Count)
                 {
                     float FCA = Context.Window.ClientBounds.Height - Measure.Y;
                     int CheckAgainst = (int)FCA + 10;
@@ -102,6 +102,6 @@ namespace hackinggame
                 SpriteBatch.DrawString(Font, CurrentIn, Position, Color.White, 0, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0.5f);
             }
             catch { CurrentIn = ""; }
-		}
-	}
+        }
+    }
 }
