@@ -86,7 +86,7 @@ namespace hackinggame
 			// Finds the center of the string in coordinates inside the text rectangle
             try
             {
-                CurrentIn = " ";
+                CurrentIn = "";
                 foreach(string ToAdd in Strings)
                     CurrentIn += ToAdd + Environment.NewLine;
                 Vector2 Measure = Font.MeasureString("Memes~$ " + CurrentIn);
