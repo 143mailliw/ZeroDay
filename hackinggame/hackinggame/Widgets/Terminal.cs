@@ -69,12 +69,12 @@ namespace hackinggame
             {
                 if (args.Key == Keys.Up)
                 {
-                    ShellToUse.UpIndex(1);
+                    ShellToUse.Index += 1;
                     Strings[Strings.Count - 1] = ShellToUse.GetFromIndex(this);
                 }
                 else if (args.Key == Keys.Down)
                 {
-                    ShellToUse.DownIndex(1);
+                    ShellToUse.Index -= 1;
                     Strings[Strings.Count - 1] = ShellToUse.GetFromIndex(this);
                 }
             };
@@ -93,7 +93,7 @@ namespace hackinggame
                 else
                 {
                     Strings[Strings.Count - 1] += args.Character?.ToString() ?? "";
-                    ShellToUse.SetIndex(0);
+                    ShellToUse.Index = 0;
                 }
             };
 

@@ -43,9 +43,7 @@ namespace hackinggame
     }
     public interface Shell
     {
-        void UpIndex(int Modifyer);
-        void DownIndex(int Modifyer);
-        void SetIndex(int Modifyer);
+        int Index { get; set; }
         string GetFromIndex(Terminal Context);
         void ParseIn(string Command, Terminal Context);
         string GetPrompt();
