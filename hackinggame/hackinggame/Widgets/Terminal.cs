@@ -46,6 +46,8 @@ namespace hackinggame
         MouseListenerSettings MouseSettings = new MouseListenerSettings();
         KeyboardListener KeyListen;
         MouseListener MouseListen;
+        Texture2D caret;
+        Rectangle caretPos;
         public int CurrentY = 32;
         int CurrentX = 10;
         public int ValuesChecked = 0;
@@ -54,6 +56,7 @@ namespace hackinggame
         int MaxLineWidth = 0;
         int ScrollUp = 0;
         int LastScrollValue = 0;
+
         public void Init(GraphicsDeviceManager GD, SpriteBatch SB, Game GameContext)
         {
             Context = GameContext;
@@ -67,9 +70,13 @@ namespace hackinggame
             Font = Context.Content.Load<SpriteFont>("font2");
             Context.Window.AllowUserResizing = true;
             Strings.Add(ShellToUse.GetPrompt());
+
+            caret = Context.Content.Load<Texture2D>("findthepixel");
+            caretPos = new Rectangle(0, 0, 3, 13);
+
             MouseListen.MouseDown += (sender, args) =>
             {
-                if(args.Button == MouseButton.Right)
+                if (args.Button == MouseButton.Right)
                     Strings[Strings.Count - 1] += System.Windows.Forms.Clipboard.GetText();
             };
             KeyListen.KeyPressed += (sender, args) =>
@@ -121,6 +128,8 @@ namespace hackinggame
             if (Mouse.GetState().ScrollWheelValue < LastScrollValue)
                 ScrollUp -= 10;
             LastScrollValue = Mouse.GetState().ScrollWheelValue;
+            caretPos.X = (int)Font.MeasureString(Strings[Strings.Count - 1]).X + 12;
+            caretPos.Y = (int)Font.MeasureString(Strings[Strings.Count - 1]).Y + 16;
         }
 
         private string WrapText(string Text) //Credit to Sankra
@@ -153,7 +162,6 @@ namespace hackinggame
         {
             try
             {
-
                 CurrentIn = "";
                 foreach (string ToAdd in Strings)
                     CurrentIn += WrapText(ToAdd) + Environment.NewLine;
@@ -172,6 +180,7 @@ namespace hackinggame
                 }
                 Vector2 Position = new Vector2(CurrentX, CurrentY);
                 SpriteBatch.DrawString(Font, CurrentIn, Position, Color.White, 0, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0.5f);
+                SpriteBatch.Draw(caret, caretPos, Color.White);
             }
             catch { CurrentIn = ""; }
         }

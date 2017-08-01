@@ -40,6 +40,7 @@ namespace hackinggame
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
         List<Widget> Widgets = new List<Widget>();
+
         public Game()
         {
             Graphics = new GraphicsDeviceManager(this);
