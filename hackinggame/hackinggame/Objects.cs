@@ -59,7 +59,7 @@ namespace hackinggame
         Exploit[] GetExploits();
         Payload[] GetPayloads();
         Loot[] GetLoot();
-        System[] GetSystems();
+        SystemGame[] GetSystems();
     }
 
     public class File
@@ -104,7 +104,7 @@ namespace hackinggame
         string Payload { get; set; }
     }
 
-    public class System
+    public class SystemGame
     {
         string SystemHostName { get; set; }
         string SystemRootName { get; set; }
