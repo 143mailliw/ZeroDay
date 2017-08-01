@@ -27,10 +27,11 @@ namespace hackinggame
         {
             Context.Context.Exit();
         }
-        [DefaultCommand("shutssdown", "Exits the game")]
-        public static void Shutssdown(string args, Terminal Context)
+
+        [DefaultCommand("metasploit", "Temp, opens hacking shell")]
+        public static void Metasploit(string args, Terminal Context)
         {
-            Context.Context.Exit();
+            Context.ShellToUse = new HackingShell();
         }
 
         [DefaultCommand("help", "Gives information on all commands")]

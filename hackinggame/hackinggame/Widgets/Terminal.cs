@@ -52,7 +52,7 @@ namespace hackinggame
         int CurrentX = 10;
         public int ValuesChecked = 0;
         public List<string> Strings = new List<string>();
-        Shell ShellToUse = new DefaultShell();
+        public Shell ShellToUse = new DefaultShell();
         int MaxLineWidth = 0;
         int ScrollUp = 0;
         int LastScrollValue = 0;
@@ -128,6 +128,7 @@ namespace hackinggame
                 {
                     string ToSend = Strings[Strings.Count - 1].Substring(ShellToUse.GetPrompt().Length, Strings[Strings.Count - 1].Length - ShellToUse.GetPrompt().Length);
                     ShellToUse.ParseIn(ToSend, this);
+                    SendOut(ShellToUse.GetPrompt());
                 }
                 else if (args.Key == Keys.Tab)
                 {

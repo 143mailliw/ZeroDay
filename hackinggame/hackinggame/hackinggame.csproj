@@ -46,7 +46,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Objects.cs" />
+    <Compile Include="Shells\Commands\HackingCommands.cs" />
     <Compile Include="Shells\Commands\DefaultCommands.cs" />
+    <Compile Include="Shells\HackingShell.cs" />
     <Compile Include="Shells\DefaultShell.cs" />
     <Compile Include="Widgets\StatusBar.cs" />
     <Compile Include="Widgets\Terminal.cs" />

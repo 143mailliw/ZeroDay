@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace hackinggame
 {
-    class DefaultShell : Shell
+    class HackingShell : Shell
     {
         List<string> History = new List<string>();
         public int Index { get; set; }
@@ -22,7 +22,7 @@ namespace hackinggame
                 Args = Command.Substring(Strings[0].Length + 1);
             }
             catch { }
-            var Type = typeof(DefaultCommands);
+            var Type = typeof(HackingCommands); 
             MethodInfo[] Methods = Type.GetMethods(BindingFlags.Public | BindingFlags.Static);
             foreach (MethodInfo Method in Methods)
             {
@@ -78,7 +78,7 @@ namespace hackinggame
 
         public string GetPrompt()
         {
-            return "Memes~$ ";
+            return "metasploit> ";
         }
     }
 }
