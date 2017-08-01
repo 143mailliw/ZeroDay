@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace hackinggame
 {
-    class HackingShell : Shell
+    class HackingShell : IShell
     {
         List<string> History = new List<string>();
         public int Index { get; set; }

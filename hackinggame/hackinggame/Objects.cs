@@ -32,17 +32,18 @@ using MonoGame.Extended;
 using MonoGame.Extended.Input.InputListeners;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
 
 namespace hackinggame
 {
-    public interface Widget
+    public interface IWidget
     {
         void Init(GraphicsDeviceManager GD, SpriteBatch SB, Game GameContext);
         void Draw(GameTime GameTick);
         void Update(GameTime GameTick);
     }
 
-    public interface Shell
+    public interface IShell
     {
         int Index { get; set; }
         string GetFromIndex(Terminal Context);
@@ -51,7 +52,7 @@ namespace hackinggame
         string[] GetTabCompletes(string ToCheck);
     }
 
-    public interface DataManager
+    public interface IDataManager
     {
         Folder[] GetFolders(string Path);
         File[] GetFiles(string Path);
@@ -66,17 +67,45 @@ namespace hackinggame
 
     public class File
     {
+        static string JSONFile { get; } = "files.json";
         string FileName { get; set; }
         byte[] FileContents { get; set; }
         string FilePath { get; set; }
         FileFlags Flags { get; set; }
+
+        public void SaveJson(string filename)
+        {
+            System.IO.File.WriteAllText(filename, ToJson());
+        }
+
+        public static File Load()
+        {
+            return JsonConvert.DeserializeObject<File>(System.IO.File.ReadAllText(JSONFile));
+        }
+
+        public string ToJson()
+            => JsonConvert.SerializeObject(this, Formatting.Indented);
     }
 
     public class Folder
     {
+        static string JSONFile { get; } = "folders.json";
         string FolderName { get; set; }
         string FolderPath { get; set; }
         FileFlags Flags { get; set; }
+
+        public void SaveJson(string filename)
+        {
+            System.IO.File.WriteAllText(filename, ToJson());
+        }
+
+        public static File Load()
+        {
+            return JsonConvert.DeserializeObject<File>(System.IO.File.ReadAllText(JSONFile));
+        }
+
+        public string ToJson()
+            => JsonConvert.SerializeObject(this, Formatting.Indented);
     }
 
     public class Port

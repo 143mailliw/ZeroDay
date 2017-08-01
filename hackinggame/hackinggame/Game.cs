@@ -39,7 +39,7 @@ namespace hackinggame
     {
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
-        List<Widget> Widgets = new List<Widget>();
+        List<IWidget> Widgets = new List<IWidget>();
 
         public Game()
         {
@@ -57,7 +57,7 @@ namespace hackinggame
         protected override void LoadContent()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-            foreach (Widget WidgetToInit in Widgets)
+            foreach (IWidget WidgetToInit in Widgets)
                 WidgetToInit.Init(Graphics, SpriteBatch, this);
         }
 
@@ -70,7 +70,7 @@ namespace hackinggame
         protected override void Update(GameTime gameTime)
         {
             // TODO: Add your update logic here
-            foreach (Widget WidgetToUpdate in Widgets)
+            foreach (IWidget WidgetToUpdate in Widgets)
                 WidgetToUpdate.Update(gameTime);
             base.Update(gameTime);
         }
@@ -79,7 +79,7 @@ namespace hackinggame
         {
             GraphicsDevice.Clear(Color.Black);
             SpriteBatch.Begin();
-            foreach (Widget WidgetToDraw in Widgets)
+            foreach (IWidget WidgetToDraw in Widgets)
                 WidgetToDraw.Draw(gameTime);
             base.Draw(gameTime);
             SpriteBatch.End();

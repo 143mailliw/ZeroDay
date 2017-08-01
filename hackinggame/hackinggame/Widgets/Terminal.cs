@@ -35,7 +35,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace hackinggame
 {
-    public class Terminal : Widget
+    public class Terminal : IWidget
     {
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
@@ -52,7 +52,7 @@ namespace hackinggame
         int CurrentX = 10;
         public int ValuesChecked = 0;
         public List<string> Strings = new List<string>();
-        public Shell ShellToUse = new DefaultShell();
+        public IShell ShellToUse = new DefaultShell();
         int MaxLineWidth = 0;
         int ScrollUp = 0;
         int LastScrollValue = 0;
