@@ -41,6 +41,7 @@ namespace hackinggame
         void Draw(GameTime GameTick);
         void Update(GameTime GameTick);
     }
+
     public interface Shell
     {
         int Index { get; set; }
@@ -48,6 +49,32 @@ namespace hackinggame
         void ParseIn(string Command, Terminal Context);
         string GetPrompt();
         string[] GetTabCompletes(string ToCheck);
+    }
+
+    public interface DataManager
+    {
+        Folder[] GetFolders();
+        File[] GetFiles();
+        Port[] GetPorts();
+        Exploit[] GetExploits();
+        Payload[] GetPayloads();
+        Loot[] GetLoot();
+        System[] GetSystems();
+    }
+
+    public class File
+    {
+        string FileName { get; set; }
+        byte[] FileContents { get; set; }
+        string FilePath { get; set; }
+        FileFlags Flags { get; set; }
+    }
+
+    public class Folder
+    {
+        string FolderName { get; set; }
+        string FolderPath { get; set; }
+        FileFlags Flags { get; set; }
     }
 
     public class Port
@@ -84,6 +111,15 @@ namespace hackinggame
         Port[] PortsAvailible { get; set; }
         Port[] PortsExploited { get; set; }
         Payload[] PayloadsInjected { get; set; }
+        Loot[] Loot { get; set; }
+    }
+
+    [Flags]
+    public enum FileFlags
+    {
+        IsBinary,
+        Read,
+        Write
     }
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
