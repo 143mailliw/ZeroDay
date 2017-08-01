@@ -56,7 +56,7 @@ namespace hackinggame
         int MaxLineWidth = 0;
         int ScrollUp = 0;
         int LastScrollValue = 0;
-
+        int CharScoll = 0;
         public void Init(GraphicsDeviceManager GD, SpriteBatch SB, Game GameContext)
         {
             Context = GameContext;
@@ -72,7 +72,7 @@ namespace hackinggame
             Strings.Add(ShellToUse.GetPrompt());
 
             caret = Context.Content.Load<Texture2D>("findthepixel");
-            caretPos = new Rectangle(0, 0, 3, 13);
+            caretPos = new Rectangle(0, 0, 8, 2 );
 
             MouseListen.MouseDown += (sender, args) =>
             {
@@ -128,8 +128,7 @@ namespace hackinggame
             if (Mouse.GetState().ScrollWheelValue < LastScrollValue)
                 ScrollUp -= 10;
             LastScrollValue = Mouse.GetState().ScrollWheelValue;
-            caretPos.X = (int)Font.MeasureString(Strings[Strings.Count - 1]).X + 12;
-            caretPos.Y = (int)Font.MeasureString(Strings[Strings.Count - 1]).Y + 16;
+            caretPos.X = (int)Font.MeasureString(Strings[Strings.Count - 1]).X + 10;
         }
 
         private string WrapText(string Text) //Credit to Sankra
@@ -170,10 +169,11 @@ namespace hackinggame
                     ScrollUp = (int)(Measure.Y - (Context.Window.ClientBounds.Height - 32));
                 if (0 > ScrollUp)
                     ScrollUp = 0;
+                caretPos.Y = (int)Measure.Y + 11;
                 float FCA = Context.Window.ClientBounds.Height - Measure.Y;
                 if (Measure.Y > Context.Window.ClientBounds.Height - 32)
                 {
-                    FCA = Context.Window.ClientBounds.Height - Measure.Y;
+                    FCA = Context.Window.ClientBounds.Height - Measure.Y + 1;
                     int CheckAgainst = (int)FCA + 10;
                     CurrentY = CheckAgainst + ScrollUp;
                     ValuesChecked = Strings.Count;
