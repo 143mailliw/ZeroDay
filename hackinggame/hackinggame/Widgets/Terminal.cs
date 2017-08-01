@@ -56,7 +56,7 @@ namespace hackinggame
         int MaxLineWidth = 0;
         int ScrollUp = 0;
         int LastScrollValue = 0;
-        int CharScoll = 0;
+        int CharScroll = 0;
         public void Init(GraphicsDeviceManager GD, SpriteBatch SB, Game GameContext)
         {
             Context = GameContext;
@@ -91,13 +91,21 @@ namespace hackinggame
                     ShellToUse.Index -= 1;
                     Strings[Strings.Count - 1] = ShellToUse.GetFromIndex(this);
                 }
+                else if (args.Key == Keys.Left)
+                {
+                    CharScroll += 1;
+                }
+                else if (args.Key == Keys.Right)
+                {
+                    CharScroll -= 1;
+                }
             };
             KeyListen.KeyTyped += (sender, args) =>
             {
                 if (args.Key == Keys.Back && CurrentIn.Length > 0)
                 {
-                    if (Strings[Strings.Count - 1] != ShellToUse.GetPrompt())
-                        Strings[Strings.Count - 1] = Strings[Strings.Count - 1].Substring(0, Strings[Strings.Count - 1].Length - 1);
+                    if (Strings[Strings.Count - 1].Substring(0, Strings[Strings.Count - 1].Length - CharScroll) != ShellToUse.GetPrompt())
+                        Strings[Strings.Count - 1] = Strings[Strings.Count - 1].Remove(Strings[Strings.Count - 1].Length - CharScroll - 1, 1);
                 }
                 else if (args.Key == Keys.Enter)
                 {
@@ -106,7 +114,7 @@ namespace hackinggame
                 }
                 else
                 {
-                    Strings[Strings.Count - 1] += args.Character?.ToString() ?? "";
+                    Strings[Strings.Count - 1] = Strings[Strings.Count - 1].Insert(Strings[Strings.Count - 1].Length - CharScroll, args.Character?.ToString() ?? "");
                     ShellToUse.Index = 0;
                     ScrollUp = 0;
                 }
@@ -128,7 +136,6 @@ namespace hackinggame
             if (Mouse.GetState().ScrollWheelValue < LastScrollValue)
                 ScrollUp -= 10;
             LastScrollValue = Mouse.GetState().ScrollWheelValue;
-            caretPos.X = (int)Font.MeasureString(Strings[Strings.Count - 1]).X + 10;
         }
 
         private string WrapText(string Text) //Credit to Sankra
@@ -169,7 +176,16 @@ namespace hackinggame
                     ScrollUp = (int)(Measure.Y - (Context.Window.ClientBounds.Height - 32));
                 if (0 > ScrollUp)
                     ScrollUp = 0;
+                if (0 > CharScroll)
+                {
+                    CharScroll += 1;
+                }
+                if (Strings[Strings.Count - 1].Substring(0, Strings[Strings.Count - 1].Length - CharScroll).Length < ShellToUse.GetPrompt().Length )
+                {
+                    CharScroll -= 1;
+                }
                 caretPos.Y = (int)Measure.Y + 11;
+                caretPos.X = (int)Font.MeasureString(Strings[Strings.Count - 1].Substring(0, Strings[Strings.Count - 1].Length - CharScroll)).X + 10;
                 float FCA = Context.Window.ClientBounds.Height - Measure.Y;
                 if (Measure.Y > Context.Window.ClientBounds.Height - 32)
                 {
