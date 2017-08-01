@@ -53,8 +53,10 @@ namespace hackinggame
 
     public interface DataManager
     {
-        Folder[] GetFolders();
-        File[] GetFiles();
+        Folder[] GetFolders(string Path);
+        File[] GetFiles(string Path);
+        File[] GetFilesInPath(string Path, string Name);
+        File[] GetFoldersInPath(string Path, string Name);
         Port[] GetPorts();
         Exploit[] GetExploits();
         Payload[] GetPayloads();
