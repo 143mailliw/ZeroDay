@@ -49,6 +49,43 @@ namespace hackinggame
         string GetPrompt();
         string[] GetTabCompletes(string ToCheck);
     }
+
+    public class Port
+    {
+        string PortName { get; set; }
+        int Value { get; set; }
+    }
+
+    public class Exploit
+    {
+        string ExploitName { get; set; }
+        string PortEffective { get; set; }
+        string FileName { get; set; }
+    }
+
+    public class Payload
+    {
+        string PayloadName { get; set; }
+        string PortEffective { get; set; }
+        string FileName { get; set; }
+    }
+
+    public class Loot
+    {
+        string LootName { get; set; }
+        string Type { get; set; }
+        string Payload { get; set; }
+    }
+
+    public class System
+    {
+        string SystemHostName { get; set; }
+        string SystemRootName { get; set; }
+        Port[] PortsAvailible { get; set; }
+        Port[] PortsExploited { get; set; }
+        Payload[] PayloadsInjected { get; set; }
+    }
+
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class DefaultCommand : Attribute
     {
