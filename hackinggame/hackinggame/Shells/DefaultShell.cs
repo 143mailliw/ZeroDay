@@ -45,6 +45,25 @@ namespace hackinggame
             Context.SendOut(GetPrompt());
         }
 
+        public string[] GetTabCompletes(string ToCheck)
+        {
+            List<string> Completes = new List<string>();
+            var Type = typeof(DefaultCommands);
+            MethodInfo[] Methods = Type.GetMethods(BindingFlags.Public | BindingFlags.Static);
+            foreach (MethodInfo Method in Methods)
+            {
+                try
+                {
+                    var SomeAttrib = Method.GetCustomAttributes(false).FirstOrDefault(x => x is DefaultCommand) as DefaultCommand;
+                    if (SomeAttrib != null && SomeAttrib.name.StartsWith(ToCheck))
+                    {
+                        Completes.Add(SomeAttrib.name);
+                    }
+                }
+                catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            }
+            return Completes.ToArray();
+        }
         public string GetFromIndex(Terminal Context)
         {
             if (Index < 0)

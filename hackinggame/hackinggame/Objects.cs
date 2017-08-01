@@ -47,6 +47,7 @@ namespace hackinggame
         string GetFromIndex(Terminal Context);
         void ParseIn(string Command, Terminal Context);
         string GetPrompt();
+        string[] GetTabCompletes(string ToCheck);
     }
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class DefaultCommand : Attribute

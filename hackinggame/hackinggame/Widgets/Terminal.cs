@@ -99,6 +99,23 @@ namespace hackinggame
                 {
                     CharScroll -= 1;
                 }
+                else if (args.Key == Keys.Tab)
+                {
+                    string ToSend = Strings[Strings.Count - 1].Substring(ShellToUse.GetPrompt().Length, Strings[Strings.Count - 1].Length - ShellToUse.GetPrompt().Length);
+                    string[] TabCompletes = ShellToUse.GetTabCompletes(ToSend);
+                    if (TabCompletes.Length == 1)
+                        Strings[Strings.Count - 1] = (ShellToUse.GetPrompt() + TabCompletes[0]);
+                    else if (TabCompletes.Length > 0)
+                    {
+                        string ToOut = "";
+                        foreach (string Complete in TabCompletes)
+                        {
+                            ToOut += Complete + " ";
+                        }
+                        SendOut(ToOut);
+                        SendOut(ShellToUse.GetPrompt());
+                    }
+                }
             };
             KeyListen.KeyTyped += (sender, args) =>
             {
@@ -112,6 +129,10 @@ namespace hackinggame
                     string ToSend = Strings[Strings.Count - 1].Substring(ShellToUse.GetPrompt().Length, Strings[Strings.Count - 1].Length - ShellToUse.GetPrompt().Length);
                     ShellToUse.ParseIn(ToSend, this);
                 }
+                else if (args.Key == Keys.Tab)
+                {
+                    //do nothing because this breaks everything lol 
+                }
                 else
                 {
                     Strings[Strings.Count - 1] = Strings[Strings.Count - 1].Insert(Strings[Strings.Count - 1].Length - CharScroll, args.Character?.ToString() ?? "");
@@ -124,7 +145,7 @@ namespace hackinggame
 
         public void SendOut(string ToAdd)
         {
-            Strings.Add(ToAdd);
+            Strings.Add(WrapText(ToAdd));
             ScrollUp = 0;
         }
 

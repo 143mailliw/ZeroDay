@@ -27,6 +27,11 @@ namespace hackinggame
         {
             Context.Context.Exit();
         }
+        [DefaultCommand("shutssdown", "Exits the game")]
+        public static void Shutssdown(string args, Terminal Context)
+        {
+            Context.Context.Exit();
+        }
 
         [DefaultCommand("help", "Gives information on all commands")]
         public static void Help(string args, Terminal Context)
