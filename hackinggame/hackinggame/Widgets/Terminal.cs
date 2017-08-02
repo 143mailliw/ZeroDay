@@ -147,7 +147,7 @@ namespace hackinggame
 
         public void SendOut(string ToAdd)
         {
-            Strings.Add(WrapText(ToAdd));
+            Strings.Add(ToAdd);
             ScrollUp = 0;
         }
 
