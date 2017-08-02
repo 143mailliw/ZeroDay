@@ -48,109 +48,45 @@ namespace hackinggame
         int Index { get; set; }
         string GetFromIndex(Terminal Context);
         void ParseIn(string Command, Terminal Context);
-        string GetPrompt();
+        string GetPrompt(Terminal Context);
         string[] GetTabCompletes(string ToCheck);
-    }
-
-    public interface IDataManager
-    {
-        Folder[] GetFolders(string Path);
-        File[] GetFiles(string Path);
-        File[] GetFilesInPath(string Path, string Name);
-        File[] GetFoldersInPath(string Path, string Name);
-        Port[] GetPorts();
-        Exploit[] GetExploits();
-        Payload[] GetPayloads();
-        Loot[] GetLoot();
-        SystemGame[] GetSystems();
-    }
-
-    public class File
-    {
-        static string JSONFile { get; } = "files.json";
-        string FileName { get; set; }
-        byte[] FileContents { get; set; }
-        string FilePath { get; set; }
-        FileFlags Flags { get; set; }
-
-        public void SaveJson(string filename)
-        {
-            System.IO.File.WriteAllText(filename, ToJson());
-        }
-
-        public static File Load()
-        {
-            return JsonConvert.DeserializeObject<File>(System.IO.File.ReadAllText(JSONFile));
-        }
-
-        public string ToJson()
-            => JsonConvert.SerializeObject(this, Formatting.Indented);
-    }
-
-    public class Folder
-    {
-        static string JSONFile { get; } = "folders.json";
-        string FolderName { get; set; }
-        string FolderPath { get; set; }
-        FileFlags Flags { get; set; }
-
-        public void SaveJson(string filename)
-        {
-            System.IO.File.WriteAllText(filename, ToJson());
-        }
-
-        public static File Load()
-        {
-            return JsonConvert.DeserializeObject<File>(System.IO.File.ReadAllText(JSONFile));
-        }
-
-        public string ToJson()
-            => JsonConvert.SerializeObject(this, Formatting.Indented);
     }
 
     public class Port
     {
-        string PortName { get; set; }
-        int Value { get; set; }
+		public string PortName { get; set; }
+		public int Value { get; set; }
     }
 
     public class Exploit
     {
-        string ExploitName { get; set; }
-        string PortEffective { get; set; }
-        string FileName { get; set; }
+		public string ExploitName { get; set; }
+		public string PortEffective { get; set; }
+		public string FileName { get; set; }
     }
 
     public class Payload
     {
-        string PayloadName { get; set; }
-        string PortEffective { get; set; }
-        string FileName { get; set; }
+		public string PayloadName { get; set; }
+		public string PortEffective { get; set; }
+		public string FileName { get; set; }
     }
 
     public class Loot
     {
-        string LootName { get; set; }
-        string Type { get; set; }
-        string Payload { get; set; }
+		public string LootName { get; set; }
+		public string Type { get; set; }
+		public string Data { get; set; }
     }
 
     public class SystemGame
     {
-        string SystemHostName { get; set; }
-        string SystemRootName { get; set; }
-        Port[] PortsAvailible { get; set; }
-        Port[] PortsExploited { get; set; }
-        Payload[] PayloadsInjected { get; set; }
-        Loot[] Loot { get; set; }
-    }
-
-    [Flags]
-    public enum FileFlags
-    {
-        IsBinary,
-        Read,
-        Write
+        public string SystemHostName { get; set; }
+		public string SystemRootName { get; set; }
+		public Port[] PortsAvailible { get; set; }
+		public Port[] PortsExploited { get; set; }
+		public Payload[] PayloadsInjected { get; set; }
+		public Loot[] Loot { get; set; }
     }
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]

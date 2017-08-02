@@ -49,7 +49,8 @@ namespace hackinggame
 
         protected override void Initialize()
         {
-            Widgets.Add(new Terminal());
+			SaveManager.SetupSaveSys();
+			Widgets.Add(new Terminal());
             Widgets.Add(new StatusBar());
             base.Initialize();
         }

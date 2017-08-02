@@ -52,7 +52,8 @@ namespace hackinggame
         int CurrentX = 10;
         public int ValuesChecked = 0;
         public List<string> Strings = new List<string>();
-        public IShell ShellToUse = new DefaultShell();
+		public IShell ShellToUse = new DefaultShell();
+		public string Username = "user";
         int MaxLineWidth = 0;
         int ScrollUp = 0;
         int LastScrollValue = 0;
@@ -69,7 +70,7 @@ namespace hackinggame
             Context.Components.Add(new InputListenerComponent(Context, MouseListen, KeyListen));
             Font = Context.Content.Load<SpriteFont>("font2");
             Context.Window.AllowUserResizing = true;
-            Strings.Add(ShellToUse.GetPrompt());
+            Strings.Add(ShellToUse.GetPrompt(this));
 
             caret = Context.Content.Load<Texture2D>("findthepixel");
             caretPos = new Rectangle(0, 0, 8, 2 );
@@ -101,10 +102,10 @@ namespace hackinggame
                 }
                 else if (args.Key == Keys.Tab)
                 {
-                    string ToSend = Strings[Strings.Count - 1].Substring(ShellToUse.GetPrompt().Length, Strings[Strings.Count - 1].Length - ShellToUse.GetPrompt().Length);
+                    string ToSend = Strings[Strings.Count - 1].Substring(ShellToUse.GetPrompt(this).Length, Strings[Strings.Count - 1].Length - ShellToUse.GetPrompt(this).Length);
                     string[] TabCompletes = ShellToUse.GetTabCompletes(ToSend);
                     if (TabCompletes.Length == 1)
-                        Strings[Strings.Count - 1] = (ShellToUse.GetPrompt() + TabCompletes[0]);
+                        Strings[Strings.Count - 1] = (ShellToUse.GetPrompt(this) + TabCompletes[0]);
                     else if (TabCompletes.Length > 0)
                     {
                         string ToOut = "";
@@ -113,7 +114,7 @@ namespace hackinggame
                             ToOut += Complete + " ";
                         }
                         SendOut(ToOut);
-                        SendOut(ShellToUse.GetPrompt());
+                        SendOut(ShellToUse.GetPrompt(this));
                     }
                 }
             };
@@ -121,14 +122,14 @@ namespace hackinggame
             {
                 if (args.Key == Keys.Back && CurrentIn.Length > 0)
                 {
-                    if (Strings[Strings.Count - 1].Substring(0, Strings[Strings.Count - 1].Length - CharScroll) != ShellToUse.GetPrompt())
+                    if (Strings[Strings.Count - 1].Substring(0, Strings[Strings.Count - 1].Length - CharScroll) != ShellToUse.GetPrompt(this))
                         Strings[Strings.Count - 1] = Strings[Strings.Count - 1].Remove(Strings[Strings.Count - 1].Length - CharScroll - 1, 1);
                 }
                 else if (args.Key == Keys.Enter)
                 {
-                    string ToSend = Strings[Strings.Count - 1].Substring(ShellToUse.GetPrompt().Length, Strings[Strings.Count - 1].Length - ShellToUse.GetPrompt().Length);
+                    string ToSend = Strings[Strings.Count - 1].Substring(ShellToUse.GetPrompt(this).Length, Strings[Strings.Count - 1].Length - ShellToUse.GetPrompt(this).Length);
                     ShellToUse.ParseIn(ToSend, this);
-                    SendOut(ShellToUse.GetPrompt());
+                    SendOut(ShellToUse.GetPrompt(this));
                 }
                 else if (args.Key == Keys.Tab)
                 {
@@ -202,7 +203,7 @@ namespace hackinggame
                 {
                     CharScroll += 1;
                 }
-                if (Strings[Strings.Count - 1].Substring(0, Strings[Strings.Count - 1].Length - CharScroll).Length < ShellToUse.GetPrompt().Length )
+                if (Strings[Strings.Count - 1].Substring(0, Strings[Strings.Count - 1].Length - CharScroll).Length < ShellToUse.GetPrompt(this).Length )
                 {
                     CharScroll -= 1;
                 }

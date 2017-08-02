@@ -70,13 +70,13 @@ namespace hackinggame
             if (Index > History.Count - 1)
                 Index = History.Count - 1;
             if (Index == 0)
-                return GetPrompt() + "";
+                return GetPrompt(Context) + "";
             if (History.Count != 0)
-                return GetPrompt() + History[History.Count - Index];
-            return GetPrompt() + "";
+                return GetPrompt(Context) + History[History.Count - Index];
+            return GetPrompt(Context) + "";
         }
 
-        public string GetPrompt()
+        public string GetPrompt(Terminal Context)
         {
             return "metasploit> ";
         }
