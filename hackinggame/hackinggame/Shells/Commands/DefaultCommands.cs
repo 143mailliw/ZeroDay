@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 using System.Reflection;
 namespace hackinggame
 {
+	[CommandClass()]
     class DefaultCommands
     {
-        [DefaultCommand("echo", "Prints a string")]
+        [Command("echo", "Prints a string", "core", "default")]
         public static void Echo(string args, Terminal Context)
         {
             Context.SendOut(args);
         }
 
-        [DefaultCommand("clear", "Clears the console")]
+        [Command("clear", "Clears the console", "core", "default")]
         public static void Clear(string args, Terminal Context)
         {
             Context.CurrentY = 32;
@@ -22,19 +23,19 @@ namespace hackinggame
             Context.Strings.Clear();
         }
 
-		[DefaultCommand("mkdir", "Creates a directory.")]
+		[Command("mkdir", "Creates a directory.", "core", "default")]
 		public static void MakeDir(string args, Terminal Context)
 		{
 			SaveManager.MakeFolder(SaveManager.CurrentDir + "/" + args);
 		}
 
-		[DefaultCommand("ls", "Lists all the files/directories in the current directory")]
+		[Command("ls", "Lists all the files/directories in the current directory", "core", "default")]
 		public static void List(string args, Terminal Context)
 		{
 			Context.SendOut(SaveManager.GetStuffInCurr());
 		}
 
-		[DefaultCommand("cd", "Changes directory.")]
+		[Command("cd", "Changes directory.", "core", "default")]
 		public static void ChangeDir(string args, Terminal Context)
 		{
 			if (args == "..")
@@ -71,36 +72,31 @@ namespace hackinggame
 			Context.SendOut("Invalid directory");
 		}
 
-		[DefaultCommand("cat", "Reads text from a file.")]
+		[Command("cat", "Reads text from a file.", "core", "default")]
 		public static void GetText(string args, Terminal Context)
 		{
 			Context.SendOut(SaveManager.GetContents(SaveManager.CurrentDir + "/" + args));
 		}
 
-		[DefaultCommand("shutdown", "Exits the game")]
+		[Command("shutdown", "Exits the game", "core", "default")]
         public static void Shutdown(string args, Terminal Context)
         {
             Context.Context.Exit();
         }
 
-        [DefaultCommand("metasploit", "Temp, opens hacking shell")]
+        [Command("pwntl", "Temp, opens hacking shell", "pwntl", "default")]
         public static void Metasploit(string args, Terminal Context)
         {
             Context.ShellToUse = new HackingShell();
         }
 
-        [DefaultCommand("help", "Gives information on all commands")]
+        [Command("help", "Gives information on all commands", "core", "default")]
         public static void Help(string args, Terminal Context)
         {
-            var Type = typeof(DefaultCommands);
-            MethodInfo[] Methods = Type.GetMethods(BindingFlags.Public | BindingFlags.Static);
-            foreach (MethodInfo Method in Methods)
-                try
-                {
-                    var SomeAttrib = Method.GetCustomAttributes(false).FirstOrDefault(x => x is DefaultCommand) as DefaultCommand;
-                    Context.SendOut(SomeAttrib.name + " - " + SomeAttrib.description);
-                }
-                catch (Exception ex) { Console.WriteLine(ex.ToString());}
+			foreach(string StringToOut in CLICommon.GetHelp("default"))
+			{
+				Context.SendOut(StringToOut);
+			}
         }
     }
 }

@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 using System.Reflection;
 namespace hackinggame
 {
+	[CommandClass]
     class HackingCommands
     {
-        [DefaultCommand("exit", "Exits this shell")]
+        [Command("exit", "Exits this shell", "pwntl", "pwntl")]
         public static void Exit(string args, Terminal Context)
         {
             Context.ShellToUse = new DefaultShell();
         }
 
-        [DefaultCommand("help", "List of commands")]
+        [Command("help", "List of commands", "pwntl", "pwntl")]
         public static void Help(string args, Terminal Context)
         {
             var Type = typeof(HackingCommands);
@@ -22,7 +23,7 @@ namespace hackinggame
             foreach (MethodInfo Method in Methods)
                 try
                 {
-                    var SomeAttrib = Method.GetCustomAttributes(false).FirstOrDefault(x => x is DefaultCommand) as DefaultCommand;
+                    var SomeAttrib = Method.GetCustomAttributes(false).FirstOrDefault(x => x is Command) as Command;
                     Context.SendOut(SomeAttrib.name + " - " + SomeAttrib.description);
                 }
                 catch (Exception ex) { Console.WriteLine(ex.ToString());}

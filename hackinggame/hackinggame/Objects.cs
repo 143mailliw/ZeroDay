@@ -90,15 +90,24 @@ namespace hackinggame
     }
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class DefaultCommand : Attribute
+    public class Command : Attribute
     {
         public string name;
         public string description;
-
-        public DefaultCommand(string name, string description)
+		public string package;
+		public string context;
+        public Command(string name, string description, string package, string context)
         {
             this.name = name;
             this.description = description;
+			this.package = package;
+			this.context = context;
         }
     }
+
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+	public class CommandClass : Attribute
+	{
+		public CommandClass() { }
+	}
 }
