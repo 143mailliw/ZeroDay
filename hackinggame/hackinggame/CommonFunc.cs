@@ -33,10 +33,10 @@ namespace hackinggame
 					try
 					{
 						var SomeAttrib = Method.GetCustomAttributes(false).FirstOrDefault(x => x is Command) as Command;
-						if (SomeAttrib.context == Context)
+						if (SomeAttrib.context == Context && PackageManager.InstalledPKGs.Contains(SomeAttrib.package))
 							ToOut.Add(SomeAttrib.name + " - " + SomeAttrib.description);
 					}
-					catch (Exception ex) { Console.WriteLine(ex.ToString()); return ToErr.ToArray(); }
+					catch (Exception ex) { Console.WriteLine(ex.ToString());}
 			}
 			return ToOut.ToArray();
 		}
@@ -53,7 +53,7 @@ namespace hackinggame
 					try
 					{
 						var SomeAttrib = Method.GetCustomAttributes(false).FirstOrDefault(x => x is Command) as Command;
-						if (SomeAttrib != null && SomeAttrib.name.StartsWith(ToCheck))
+						if (SomeAttrib != null && SomeAttrib.name.StartsWith(ToCheck) && PackageManager.InstalledPKGs.Contains(SomeAttrib.package) && SomeAttrib.context == Context)
 						{
 							Completes.Add(SomeAttrib.name);
 						}
@@ -85,7 +85,7 @@ namespace hackinggame
 						var SomeAttrib = Method.GetCustomAttributes(false).FirstOrDefault(x => x is Command) as Command;
 						if (SomeAttrib != null)
 						{
-							if (SomeAttrib.name == Strings[0] && SomeAttrib.context == CMDContext)
+							if (SomeAttrib.name == Strings[0] && SomeAttrib.context == CMDContext && PackageManager.InstalledPKGs.Contains(SomeAttrib.package))
 							{
 								Method.Invoke(OBJContext, new object[] { Args, Context });
 								IsNF = false;
@@ -93,7 +93,7 @@ namespace hackinggame
 							}
 						}
 					}
-					catch (Exception ex) { Console.WriteLine(ex.ToString()); Context.SendOut("Command not found"); }
+					catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 				}
 			}
 			if (IsNF)

@@ -98,5 +98,35 @@ namespace hackinggame
 				Context.SendOut(StringToOut);
 			}
         }
-    }
+
+		[Command("zpm", "The Zero Package Manager", "core", "default")]
+		public static void PackageManagerCMD(string args, Terminal Context)
+		{
+			string[] Arguments = args.Split(' ');
+			int RetVal = 0;
+			if (Arguments.Length == 0 | Arguments.Length == 1)
+			{
+				Context.SendOut("Missing arguments.");
+				return;
+			}
+			if (Arguments[0] == "remove")
+			{
+				RetVal = PackageManager.RemovePKG(Arguments[1]);
+				if (RetVal == 1)
+					Context.SendOut("Package not installed.");
+				if (RetVal == 0)
+					Context.SendOut("Package removed.");
+			}
+			if (Arguments[0] == "install")
+			{
+				RetVal = PackageManager.InstallPKG(Arguments[1], PackageManager.DebugMode);
+				if (RetVal == 1)
+					Context.SendOut("Package not available.");
+				if (RetVal == 2)
+					Context.SendOut("Package already installed.");
+				if (RetVal == 0)
+					Context.SendOut("Package installed.");
+			}
+		}
+	}
 }

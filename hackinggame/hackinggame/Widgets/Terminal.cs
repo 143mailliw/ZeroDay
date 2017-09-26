@@ -71,7 +71,7 @@ namespace hackinggame
             Font = Context.Content.Load<SpriteFont>("font2");
             Context.Window.AllowUserResizing = true;
             Strings.Add(ShellToUse.GetPrompt(this));
-
+			PackageManager.SetupPKGSys();
             caret = Context.Content.Load<Texture2D>("findthepixel");
             caretPos = new Rectangle(0, 0, 8, 2 );
 
