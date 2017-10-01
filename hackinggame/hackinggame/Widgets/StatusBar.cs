@@ -37,7 +37,11 @@ namespace hackinggame
 {
     class StatusBar : IWidget
     {
-        GraphicsDeviceManager Graphics;
+		public bool IsBound { get; set; }
+		public int CurrentY { get; set; }
+		public int CurrentX { get; set; }
+		public int Height { get; set; }
+		GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
         SpriteFont Font;
         Game Context;
@@ -51,11 +55,12 @@ namespace hackinggame
             Context = GameContext;
             SpriteBatch = SB;
             Graphics = GD;
-            Position = new Vector2(0, 0);
+			Position = new Vector2(0, 0);
             Font = Context.Content.Load<SpriteFont>("font");
             Texture = Context.Content.Load<Texture2D>("findthepixel");
             Floppy = Context.Content.Load<Texture2D>("flp");
             Ping = Context.Content.Load<Texture2D>("Ping");
+			Height = 24;
         }
 
         public void Update(GameTime GameTick)
@@ -65,12 +70,12 @@ namespace hackinggame
 
         public void Draw(GameTime GameTick)
         {
-            SpriteBatch.Draw(Texture, new Rectangle(0, 0, Context.Window.ClientBounds.Width, 22), new Color (0,0,50));
-            SpriteBatch.Draw(Texture, new Rectangle(0, 22, Context.Window.ClientBounds.Width, 2), new Color(0, 0, 75));
+            SpriteBatch.Draw(Texture, new Rectangle(CurrentX, CurrentY, Context.Window.ClientBounds.Width, 22), new Color (0,0,50));
+            SpriteBatch.Draw(Texture, new Rectangle(CurrentX, CurrentY + 22, Context.Window.ClientBounds.Width, 2), new Color(0, 0, 75));
             Vector2 Measure = Font.MeasureString(DateTime.Now.ToString("h:mm"));
-            Vector2 Position = new Vector2(Context.Window.ClientBounds.Width - 10 - Measure.X, 3);
+            Vector2 Position = new Vector2(CurrentX + Context.Window.ClientBounds.Width - 10 - Measure.X, 3);
             SpriteBatch.DrawString(Font, DateTime.Now.ToString("h:mm"), Position, new Color(230, 230, 255), 0, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0.5f);
-            SpriteBatch.Draw(Floppy, new Rectangle(10, 2, 20, 20), new Color(230, 230, 255));
+            SpriteBatch.Draw(Floppy, new Rectangle(CurrentX + 10, CurrentY + 2, 20, 20), new Color(230, 230, 255));
         }
     }
 }

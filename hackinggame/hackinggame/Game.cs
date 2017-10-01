@@ -37,9 +37,8 @@ namespace hackinggame
 {
     public class Game : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager Graphics;
-        SpriteBatch SpriteBatch;
-        List<IWidget> Widgets = new List<IWidget>();
+        public GraphicsDeviceManager Graphics;
+        public SpriteBatch SpriteBatch;
 
         public Game()
         {
@@ -50,17 +49,16 @@ namespace hackinggame
         protected override void Initialize()
         {
 			SaveManager.SetupSaveSys();
-			Widgets.Add(new Terminal());
-            Widgets.Add(new StatusBar());
+			PackageManager.SetupPKGSys();
+			GUIManager.SetupGUISys(this);
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-            foreach (IWidget WidgetToInit in Widgets)
-                WidgetToInit.Init(Graphics, SpriteBatch, this);
-        }
+			GUIManager.Init();
+		}
 
         protected override void UnloadContent()
         {
@@ -70,9 +68,8 @@ namespace hackinggame
 
         protected override void Update(GameTime gameTime)
         {
-            // TODO: Add your update logic here
-            foreach (IWidget WidgetToUpdate in Widgets)
-                WidgetToUpdate.Update(gameTime);
+			// TODO: Add your update logic here
+			GUIManager.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -80,8 +77,7 @@ namespace hackinggame
         {
             GraphicsDevice.Clear(Color.Black);
             SpriteBatch.Begin();
-            foreach (IWidget WidgetToDraw in Widgets)
-                WidgetToDraw.Draw(gameTime);
+			GUIManager.Draw(gameTime);
             base.Draw(gameTime);
             SpriteBatch.End();
         }

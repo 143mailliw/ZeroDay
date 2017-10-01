@@ -9,6 +9,7 @@ namespace hackinggame
 {
 	static class CLICommon
 	{
+		//i worked on my game today
 		public static IEnumerable<Type> GetAllCommandClasses(Assembly assembly)
 		{
 			foreach (Type type in assembly.GetTypes())

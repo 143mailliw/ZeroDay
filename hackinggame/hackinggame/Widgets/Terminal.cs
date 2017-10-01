@@ -37,7 +37,7 @@ namespace hackinggame
 {
     public class Terminal : IWidget
     {
-        GraphicsDeviceManager Graphics;
+		GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
         SpriteFont Font;
         public Game Context;
@@ -48,8 +48,11 @@ namespace hackinggame
         MouseListener MouseListen;
         Texture2D caret;
         Rectangle caretPos;
-        public int CurrentY = 32;
-        int CurrentX = 10;
+		public bool IsBound { get; set; }
+		public int Height { get; set; }
+		public int CurrentY { get; set; }
+        public int CurrentX { get; set; }
+		int CurrYWorking;
         public int ValuesChecked = 0;
         public List<string> Strings = new List<string>();
 		public IShell ShellToUse = new DefaultShell();
@@ -71,7 +74,6 @@ namespace hackinggame
             Font = Context.Content.Load<SpriteFont>("font2");
             Context.Window.AllowUserResizing = true;
             Strings.Add(ShellToUse.GetPrompt(this));
-			PackageManager.SetupPKGSys();
             caret = Context.Content.Load<Texture2D>("findthepixel");
             caretPos = new Rectangle(0, 0, 8, 2 );
 
@@ -142,6 +144,7 @@ namespace hackinggame
                     ScrollUp = 0;
                 }
             };
+			CurrYWorking = CurrentY + 10;
 
         }
 
@@ -191,6 +194,7 @@ namespace hackinggame
         {
             try
             {
+				CurrYWorking = CurrentY;
                 CurrentIn = "";
                 foreach (string ToAdd in Strings)
                     CurrentIn += WrapText(ToAdd) + Environment.NewLine;
@@ -209,15 +213,15 @@ namespace hackinggame
                 }
                 caretPos.Y = (int)Measure.Y + 11;
                 caretPos.X = (int)Font.MeasureString(Strings[Strings.Count - 1].Substring(0, Strings[Strings.Count - 1].Length - CharScroll)).X + 10;
-                float FCA = Context.Window.ClientBounds.Height - Measure.Y;
-                if (Measure.Y > Context.Window.ClientBounds.Height - 32)
+                float FCA = Context.Window.ClientBounds.Height - Measure.Y ;
+                if (Measure.Y > Context.Window.ClientBounds.Height - CurrentY)
                 {
                     FCA = Context.Window.ClientBounds.Height - Measure.Y + 1;
-                    int CheckAgainst = (int)FCA + 10;
-                    CurrentY = CheckAgainst + ScrollUp;
+                    int CheckAgainst = (int)FCA;
+                    CurrYWorking = CheckAgainst + ScrollUp;
                     ValuesChecked = Strings.Count;
                 }
-                Vector2 Position = new Vector2(CurrentX, CurrentY);
+                Vector2 Position = new Vector2(CurrentX + 10, CurrYWorking + 10);
                 SpriteBatch.DrawString(Font, CurrentIn, Position, Color.White, 0, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0.5f);
                 SpriteBatch.Draw(caret, caretPos, Color.White);
             }

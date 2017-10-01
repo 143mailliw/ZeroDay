@@ -38,7 +38,11 @@ namespace hackinggame
 {
     public interface IWidget
     {
-        void Init(GraphicsDeviceManager GD, SpriteBatch SB, Game GameContext);
+		bool IsBound { get; set; } //if not bound then CurrentY and CurrentX are meaningless
+		int CurrentY { get; set; }
+		int CurrentX { get; set; }
+		int Height { get; set; }
+		void Init(GraphicsDeviceManager GD, SpriteBatch SB, Game GameContext);
         void Draw(GameTime GameTick);
         void Update(GameTime GameTick);
     }

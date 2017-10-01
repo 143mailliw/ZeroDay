@@ -7,7 +7,7 @@ using System.Reflection;
 namespace hackinggame
 {
 	[CommandClass()]
-    class DefaultCommands
+    class core
     {
         [Command("echo", "Prints a string", "core", "default")]
         public static void Echo(string args, Terminal Context)
@@ -82,12 +82,6 @@ namespace hackinggame
         public static void Shutdown(string args, Terminal Context)
         {
             Context.Context.Exit();
-        }
-
-        [Command("pwntl", "Temp, opens hacking shell", "pwntl", "default")]
-        public static void Metasploit(string args, Terminal Context)
-        {
-            Context.ShellToUse = new HackingShell();
         }
 
         [Command("help", "Gives information on all commands", "core", "default")]
