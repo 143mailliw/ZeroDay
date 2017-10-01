@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Managers\CLIManager.cs" />
+    <Compile Include="Managers\NetworkManager.cs" />
     <Compile Include="Managers\SaveManager.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Managers\GUIManager.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="Objects.cs" />
     <Compile Include="Commands\pwntl.cs" />
     <Compile Include="Commands\core.cs" />
+    <Compile Include="SaveData.cs" />
     <Compile Include="Shells\HackingShell.cs" />
     <Compile Include="Shells\DefaultShell.cs" />
     <Compile Include="Widgets\StatusBar.cs" />

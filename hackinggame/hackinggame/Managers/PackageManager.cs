@@ -23,6 +23,7 @@ namespace hackinggame
 			if (InstalledPKGs.Contains(PKG))
 				return 2;
 			InstalledPKGs.Add(PKG);
+			SaveManager.Save();
 			return 0;
 		}
 
@@ -31,6 +32,7 @@ namespace hackinggame
 			if (!InstalledPKGs.Contains(PKG))
 				return 1;
 			InstalledPKGs.Remove(PKG);
+			SaveManager.Save();
 			return 0;
 		}
 

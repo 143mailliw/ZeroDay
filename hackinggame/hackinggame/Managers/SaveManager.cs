@@ -14,6 +14,7 @@ namespace hackinggame
 		public static string FileSavePath = BasePath + "Files/";
 		public static string SavePath = BasePath + "save.json";
 		public static string CurrentDir = "";
+		public static SaveData Data;
 
 		public static void SetupSaveSys()
 		{
@@ -29,6 +30,26 @@ namespace hackinggame
 				Directory.CreateDirectory(FileSavePath);
 				WriteFile(Encoding.ASCII.GetBytes("Memes"), "info.txt");
 			}
+			if (!File.Exists(SavePath))
+				Data = new SaveData();
+			else
+				Load(SavePath);
+		}
+
+		public static void Save()
+		{
+			Data.InstalledPKGs = PackageManager.InstalledPKGs;
+			Data.UnlockedPKGs = PackageManager.UnlockedPKGs;
+			Data.DebugMode = PackageManager.DebugMode;
+			File.WriteAllText(SavePath, JsonConvert.SerializeObject(Data));
+		}
+
+		public static void Load(string Path)
+		{
+			Data = JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(Path));
+			PackageManager.InstalledPKGs = Data.InstalledPKGs;
+			PackageManager.UnlockedPKGs = Data.UnlockedPKGs;
+			PackageManager.DebugMode = Data.DebugMode;
 		}
 
 		public static string GetStuffInCurr()
