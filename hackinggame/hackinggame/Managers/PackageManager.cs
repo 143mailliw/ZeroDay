@@ -50,22 +50,17 @@ namespace hackinggame
 
 		static void SetupUsedPackages()
 		{
-			IEnumerable<Type> Classes = CLICommon.GetAllCommandClasses(Assembly.GetCallingAssembly());
-			foreach (Type TypeToHandle in Classes)
+			foreach (MethodInfo Method in AssemblyManager.CommandFunctions)
 			{
-				MethodInfo[] Methods = TypeToHandle.GetMethods(BindingFlags.Public | BindingFlags.Static);
-				foreach (MethodInfo Method in Methods)
+				try
 				{
-					try
+					var SomeAttrib = Method.GetCustomAttributes(false).FirstOrDefault(x => x is Command) as Command;
+					if (SomeAttrib != null && !ExistingPKGs.Contains(SomeAttrib.package))
 					{
-						var SomeAttrib = Method.GetCustomAttributes(false).FirstOrDefault(x => x is Command) as Command;
-						if (SomeAttrib != null && !ExistingPKGs.Contains(SomeAttrib.package))
-						{
-							ExistingPKGs.Add(SomeAttrib.package);
-						}
+						ExistingPKGs.Add(SomeAttrib.package);
 					}
-					catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 				}
+				catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 			}
 		}
 	}

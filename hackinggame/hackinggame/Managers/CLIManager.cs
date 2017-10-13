@@ -9,58 +9,37 @@ namespace hackinggame
 {
 	static class CLICommon
 	{
-		//i worked on my game today
-		public static IEnumerable<Type> GetAllCommandClasses(Assembly assembly)
-		{
-			foreach (Type type in assembly.GetTypes())
-			{
-				if (type.GetCustomAttributes(typeof(CommandClass), true).Length > 0)
-				{
-					yield return type;
-				}
-			}
-		}
 
 		public static string[] GetHelp(string Context)
 		{
 			List<string> ToOut = new List<string>();
 			List<string> ToErr = new List<string>();
-			IEnumerable<Type> Classes = GetAllCommandClasses(Assembly.GetCallingAssembly()); //kill me if this happens and it's not because GetAllCommandClasses' code is fucked, because then microsoft derped .net
 			ToErr.Add("Help returned failure. See console for details.");
-			foreach (Type TypeToHandle in Classes)
-			{
-				MethodInfo[] Methods = TypeToHandle.GetMethods(BindingFlags.Public | BindingFlags.Static);
-				foreach (MethodInfo Method in Methods)
-					try
-					{
-						var SomeAttrib = Method.GetCustomAttributes(false).FirstOrDefault(x => x is Command) as Command;
-						if (SomeAttrib.context == Context && PackageManager.InstalledPKGs.Contains(SomeAttrib.package))
-							ToOut.Add(SomeAttrib.name + " - " + SomeAttrib.description);
-					}
-					catch (Exception ex) { Console.WriteLine(ex.ToString());}
-			}
+			foreach (MethodInfo Method in AssemblyManager.CommandFunctions)
+				try
+				{
+					var SomeAttrib = Method.GetCustomAttributes(false).FirstOrDefault(x => x is Command) as Command;
+					if (SomeAttrib.context == Context && PackageManager.InstalledPKGs.Contains(SomeAttrib.package))
+						ToOut.Add(SomeAttrib.name + " - " + SomeAttrib.description);
+				}
+				catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 			return ToOut.ToArray();
 		}
 
 		public static string[] GetAutoCompletes(string Context, string ToCheck)
 		{
 			List<string> Completes = new List<string>();
-			IEnumerable<Type> Classes = GetAllCommandClasses(Assembly.GetCallingAssembly());
-			foreach (Type TypeToHandle in Classes)
+			foreach (MethodInfo Method in AssemblyManager.CommandFunctions)
 			{
-				MethodInfo[] Methods = TypeToHandle.GetMethods(BindingFlags.Public | BindingFlags.Static);
-				foreach (MethodInfo Method in Methods)
+				try
 				{
-					try
+					var SomeAttrib = Method.GetCustomAttributes(false).FirstOrDefault(x => x is Command) as Command;
+					if (SomeAttrib != null && SomeAttrib.name.StartsWith(ToCheck) && PackageManager.InstalledPKGs.Contains(SomeAttrib.package) && SomeAttrib.context == Context)
 					{
-						var SomeAttrib = Method.GetCustomAttributes(false).FirstOrDefault(x => x is Command) as Command;
-						if (SomeAttrib != null && SomeAttrib.name.StartsWith(ToCheck) && PackageManager.InstalledPKGs.Contains(SomeAttrib.package) && SomeAttrib.context == Context)
-						{
-							Completes.Add(SomeAttrib.name);
-						}
+						Completes.Add(SomeAttrib.name);
 					}
-					catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 				}
+				catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 			}
 			return Completes.ToArray();
 		}
@@ -75,27 +54,22 @@ namespace hackinggame
 				Args = Command.Substring(Strings[0].Length + 1);
 			}
 			catch { }
-			IEnumerable<Type> Classes = GetAllCommandClasses(Assembly.GetCallingAssembly());
-			foreach (Type TypeToHandle in Classes)
+			foreach (MethodInfo Method in AssemblyManager.CommandFunctions)
 			{
-				MethodInfo[] Methods = TypeToHandle.GetMethods(BindingFlags.Public | BindingFlags.Static);
-				foreach (MethodInfo Method in Methods)
+				try
 				{
-					try
+					var SomeAttrib = Method.GetCustomAttributes(false).FirstOrDefault(x => x is Command) as Command;
+					if (SomeAttrib != null)
 					{
-						var SomeAttrib = Method.GetCustomAttributes(false).FirstOrDefault(x => x is Command) as Command;
-						if (SomeAttrib != null)
+						if (SomeAttrib.name == Strings[0] && SomeAttrib.context == CMDContext && PackageManager.InstalledPKGs.Contains(SomeAttrib.package))
 						{
-							if (SomeAttrib.name == Strings[0] && SomeAttrib.context == CMDContext && PackageManager.InstalledPKGs.Contains(SomeAttrib.package))
-							{
-								Method.Invoke(OBJContext, new object[] { Args, Context });
-								IsNF = false;
-								return;
-							}
+							Method.Invoke(OBJContext, new object[] { Args, Context });
+							IsNF = false;
+							return;
 						}
 					}
-					catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 				}
+				catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 			}
 			if (IsNF)
 				Context.SendOut("Command not found");

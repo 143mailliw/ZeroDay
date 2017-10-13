@@ -12,6 +12,7 @@ namespace hackinggame
 	{
 		public static string BasePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/ZeroDay/";
 		public static string FileSavePath = BasePath + "Files/";
+		public static string ModLoadPath = BasePath + "Mods/";
 		public static string SavePath = BasePath + "save.json";
 		public static string CurrentDir = "";
 		public static SaveData Data;
@@ -25,6 +26,8 @@ namespace hackinggame
 		{
 			if (!Directory.Exists(BasePath))
 				Directory.CreateDirectory(BasePath);
+			if (!Directory.Exists(ModLoadPath))
+				Directory.CreateDirectory(ModLoadPath);
 			if (Directory.Exists(FileSavePath))
 			{
 				Directory.CreateDirectory(FileSavePath);

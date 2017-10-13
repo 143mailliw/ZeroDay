@@ -49,6 +49,7 @@ namespace hackinggame
         protected override void Initialize()
         {
 			SaveManager.SetupSaveSys();
+			AssemblyManager.SetupAssemblyManager(true);
 			PackageManager.SetupPKGSys();
 			GUIManager.SetupGUISys(this);
             base.Initialize();
